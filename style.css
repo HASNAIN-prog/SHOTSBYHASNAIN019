@@ -233,3 +233,61 @@ footer {
   color: #888;
   font-size: 0.9rem;
 }
+/* INSTAGRAM LINK STYLE */
+.socials {
+  margin-top: 1.2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  animation: fadeIn 1s ease forwards;
+  animation-delay: 1.4s;
+}
+
+.insta-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 18px;
+  padding: 8px 18px;
+  backdrop-filter: blur(6px);
+  text-decoration: none;
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 0 14px rgba(255, 255, 255, 0.08);
+  transition: all 0.3s ease;
+}
+
+.insta-link:hover {
+  background: rgba(255, 255, 255, 0.18);
+  transform: scale(1.05);
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+}
+
+.insta-icon {
+  width: 26px;
+  height: 26px;
+  filter: invert(1) drop-shadow(0 0 4px rgba(255,255,255,0.2));
+  transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+.insta-link:hover .insta-icon {
+  transform: rotate(10deg) scale(1.08);
+  filter: invert(1) drop-shadow(0 0 6px rgba(255,255,255,0.5));
+}
+
+/* Make it responsive */
+@media (max-width: 768px) {
+  .insta-link {
+    font-size: 0.9rem;
+    padding: 6px 14px;
+  }
+
+  .insta-icon {
+    width: 22px;
+    height: 22px;
+  }
+}
