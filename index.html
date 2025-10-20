@@ -180,6 +180,21 @@
     }, { passive: false });
 
     lightboxImg.addEventListener('touchend', () => { pinchStart = null; });
+
+    // DOUBLE CLICK TO RESET ZOOM
+lightboxImg.addEventListener('dblclick', () => {
+  // smooth zoom-out animation
+  lightboxImg.style.transition = 'transform 0.3s ease';
+  scale = 1;
+  translate = { x: 0, y: 0 };
+  applyTransform();
+
+  // remove transition after animation completes
+  setTimeout(() => {
+    lightboxImg.style.transition = '';
+  }, 300);
+});
+
   </script>
 </body>
 </html>
