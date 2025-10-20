@@ -235,3 +235,58 @@ header p {
 @keyframes fadeIn {
   to { opacity: 1; }
 }
+/* NAVIGATION BUTTONS */
+.nav-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #fff;
+  font-size: 42px;
+  background: var(--accent);
+  border-radius: 50%;
+  padding: 14px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  user-select: none;
+  z-index: 2100;
+  backdrop-filter: blur(6px);
+  box-shadow: 0 0 12px rgba(255, 255, 255, 0.15);
+}
+
+.nav-btn:hover {
+  background: rgba(255, 255, 255, 0.25);
+  transform: translateY(-50%) scale(1.08);
+}
+
+/* Position left/right buttons further from the image on desktop */
+.nav-btn.left {
+  left: 3%;
+}
+
+.nav-btn.right {
+  right: 3%;
+}
+
+/* MOBILE FIX */
+@media (max-width: 768px) {
+  .nav-btn {
+    font-size: 32px;
+    padding: 10px;
+    top: auto;
+    bottom: 30px;
+    transform: none;
+    background: rgba(255,255,255,0.1);
+  }
+
+  .nav-btn.left {
+    left: 25%;
+  }
+
+  .nav-btn.right {
+    right: 25%;
+  }
+
+  .nav-btn:hover {
+    transform: scale(1.1);
+  }
+}
