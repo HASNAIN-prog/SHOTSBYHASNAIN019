@@ -115,24 +115,22 @@ header p {
   transform: rotate(90deg);
   opacity: 1;
 }
-
-/* Nav buttons */
+/* NAVIGATION BUTTONS */
 .nav-btn {
-  position: fixed;
+  position: absolute;
   top: 50%;
   transform: translateY(-50%);
   color: #fff;
-  font-size: 32px;
+  font-size: 42px;
   background: var(--accent);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: 14px;
-  padding: 18px 22px;
+  border-radius: 50%;
+  padding: 14px;
   cursor: pointer;
-  transition: 0.25s ease;
+  transition: all 0.25s ease;
   user-select: none;
   z-index: 2100;
   backdrop-filter: blur(6px);
-  box-shadow: 0 0 12px var(--btn-glow);
+  box-shadow: 0 0 12px rgba(255, 255, 255, 0.15);
 }
 
 .nav-btn:hover {
@@ -140,8 +138,38 @@ header p {
   transform: translateY(-50%) scale(1.08);
 }
 
-.nav-btn.left { left: 35px; }
-.nav-btn.right { right: 35px; }
+/* Position left/right buttons further from the image on desktop */
+.nav-btn.left {
+  left: 3%;
+}
+
+.nav-btn.right {
+  right: 3%;
+}
+
+/* MOBILE FIX */
+@media (max-width: 768px) {
+  .nav-btn {
+    font-size: 32px;
+    padding: 10px;
+    top: auto;
+    bottom: 30px;
+    transform: none;
+    background: rgba(255,255,255,0.1);
+  }
+
+  .nav-btn.left {
+    left: 25%;
+  }
+
+  .nav-btn.right {
+    right: 25%;
+  }
+
+  .nav-btn:hover {
+    transform: scale(1.1);
+  }
+}
 
 footer {
   margin-top: 30px;
