@@ -4,155 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>shotsbyhasnain019</title>
-
-  <style>
-    :root {
-      --bg: #0b0b0b;
-      --muted: #bdbdbd;
-      --accent: rgba(255, 255, 255, 0.1);
-    }
-
-    body {
-      font-family: Poppins, Inter, sans-serif;
-      background: var(--bg);
-      color: #fff;
-      text-align: center;
-      margin: 0;
-      overflow-x: hidden;
-    }
-
-    header {
-      padding: 2rem 1rem;
-      border-bottom: 1px solid rgba(255,255,255,0.05);
-    }
-
-    h1 { font-size: 2rem; margin: 0; }
-    header p { color: var(--muted); margin-top: 0.3rem; }
-
-    /* GALLERY */
-    .gallery {
-      max-width: 1100px;
-      margin: 20px auto;
-      padding: 10px;
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 12px;
-    }
-
-    .thumb {
-      border-radius: 12px;
-      overflow: hidden;
-      position: relative;
-    }
-
-    .thumb img {
-      width: 100%;
-      height: 240px;
-      object-fit: cover;
-      transition: opacity 0.4s ease, transform 0.35s ease, filter 0.35s ease;
-      cursor: pointer;
-      border-radius: 12px;
-      opacity: 0;
-    }
-
-    .thumb img.loaded {
-      opacity: 1;
-    }
-
-    .thumb:hover img {
-      transform: scale(1.05);
-      filter: brightness(0.9);
-    }
-
-    /* LIGHTBOX */
-    .lightbox {
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.93);
-      display: none;
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
-      z-index: 2000;
-      transition: opacity 0.25s ease;
-    }
-
-    .lightbox.open { display: flex; animation: fadeIn 0.25s ease forwards; }
-
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-
-    .lightbox img {
-      max-width: 90%;
-      max-height: 85%;
-      border-radius: 10px;
-      box-shadow: 0 10px 40px rgba(0,0,0,0.6);
-      transition: transform 0.2s ease;
-      cursor: grab;
-    }
-
-    /* CLOSE BUTTON */
-    .close-btn {
-      position: absolute;
-      top: 24px;
-      right: 24px;
-      font-size: 32px;
-      color: #fff;
-      cursor: pointer;
-      transition: transform 0.25s ease, opacity 0.25s ease;
-      opacity: 0.8;
-      font-weight: 300;
-    }
-
-    .close-btn:hover {
-      transform: rotate(90deg);
-      opacity: 1;
-    }
-
-    /* NAVIGATION BUTTONS */
-    .nav-btn {
-      position: fixed;
-      top: 50%;
-      transform: translateY(-50%);
-      color: #fff;
-      font-size: 42px;
-      background: var(--accent);
-      border-radius: 50%;
-      padding: 16px 20px;
-      cursor: pointer;
-      transition: 0.25s ease;
-      user-select: none;
-      z-index: 2100;
-      backdrop-filter: blur(4px);
-    }
-
-    .nav-btn:hover {
-      background: rgba(255,255,255,0.2);
-      transform: translateY(-50%) scale(1.08);
-    }
-
-    .nav-btn.left { left: 35px; }
-    .nav-btn.right { right: 35px; }
-
-    footer {
-      margin-top: 30px;
-      padding: 1rem;
-      color: #888;
-      font-size: 0.9rem;
-    }
-
-    @media (max-width: 768px) {
-      .nav-btn {
-        font-size: 30px;
-        padding: 10px 12px;
-        left: 12px;
-        right: 12px;
-      }
-      .close-btn { font-size: 26px; top: 16px; right: 16px; }
-    }
-  </style>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
@@ -165,9 +17,9 @@
 
   <div class="lightbox" id="lightbox">
     <span class="close-btn" id="closeBtn">&times;</span>
-    <span class="nav-btn left" id="prevBtn">&#10094;</span>
+    <button class="nav-btn left" id="prevBtn">&#10094;</button>
     <img id="lightboxImg" alt="photo" draggable="false">
-    <span class="nav-btn right" id="nextBtn">&#10095;</span>
+    <button class="nav-btn right" id="nextBtn">&#10095;</button>
   </div>
 
   <footer>© 2025 shotsbyhasnain019</footer>
@@ -195,7 +47,6 @@
       }
     }
 
-    // Auto detect all images
     (async function loadGallery() {
       let i = 1;
       while (true) {
@@ -209,7 +60,7 @@
             img.loading = 'lazy';
             img.addEventListener('load', () => img.classList.add('loaded'));
 
-            const index = thumbs.length; // ✅ fix: store correct index
+            const index = thumbs.length;
             img.addEventListener('click', () => openAt(index));
 
             const div = document.createElement('div');
@@ -272,7 +123,6 @@
       if (e.key === 'ArrowLeft') prevImage();
     });
 
-    // ZOOM + DRAG + PINCH
     function applyTransform() {
       lightboxImg.style.transform = `scale(${scale}) translate(${translate.x}px, ${translate.y}px)`;
     }
@@ -306,7 +156,7 @@
       lightboxImg.releasePointerCapture(e.pointerId);
     });
 
-    // Pinch zoom (mobile)
+    // Pinch zoom
     let pinchStart = null;
     lightboxImg.addEventListener('touchstart', e => {
       if (e.touches.length === 2) {
