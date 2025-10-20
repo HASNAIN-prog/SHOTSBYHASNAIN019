@@ -161,26 +161,27 @@ header p {
   opacity: 1;
 }
 
-/* NAVIGATION BUTTONS */
+/* NAVIGATION BUTTONS — rounded glass boxes */
 .nav-btn {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
   color: #fff;
-  font-size: 42px;
-  background: var(--accent);
-  border-radius: 50%;
-  padding: 14px;
+  font-size: 40px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  padding: 14px 20px;
   cursor: pointer;
   transition: all 0.25s ease;
   user-select: none;
   z-index: 2100;
   backdrop-filter: blur(6px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   box-shadow: 0 0 12px rgba(255, 255, 255, 0.15);
 }
 
 .nav-btn:hover {
-  background: rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 0.2);
   transform: translateY(-50%) scale(1.08);
 }
 
@@ -196,13 +197,14 @@ header p {
 @media (max-width: 768px) {
   .nav-btn {
     position: fixed;
-    bottom: 30px;
+    bottom: 28px;
     top: auto;
     transform: none;
-    font-size: 34px;
-    padding: 12px;
+    font-size: 32px;
+    padding: 12px 18px;
     background: rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(10px);
+    border-radius: 12px;
   }
 
   .nav-btn.left {
