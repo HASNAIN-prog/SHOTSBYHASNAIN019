@@ -9,7 +9,7 @@
     :root {
       --bg: #0b0b0b;
       --muted: #bdbdbd;
-      --accent: #ffffff15;
+      --accent: rgba(255, 255, 255, 0.08);
     }
 
     body {
@@ -87,32 +87,36 @@
     .close-btn {
       position: absolute;
       top: 20px;
-      right: 30px;
-      font-size: 40px;
+      right: 20px;
+      font-size: 34px;
       color: #fff;
       cursor: pointer;
       transition: 0.2s;
-    }
-    .close-btn:hover { color: #ccc; }
-
-    /* NAV BUTTONS */
-    .nav-btn {
-      position: fixed;
-      top: 50%;
-      transform: translateY(-50%);
-      font-size: 50px;
-      color: #fff;
       background: var(--accent);
       border-radius: 50%;
       padding: 8px 14px;
+    }
+    .close-btn:hover { background: rgba(255,255,255,0.15); }
+
+    /* NAV BUTTONS (corners) */
+    .nav-btn {
+      position: fixed;
+      color: #fff;
+      font-size: 32px;
+      background: var(--accent);
+      border-radius: 12px;
+      padding: 14px 18px;
       cursor: pointer;
       transition: 0.25s;
       user-select: none;
+      z-index: 2100;
     }
-    .nav-btn:hover { background: rgba(255,255,255,0.15); transform: translateY(-50%) scale(1.05); }
-
-    .nav-btn.left { left: 30px; }
-    .nav-btn.right { right: 30px; }
+    .nav-btn:hover {
+      background: rgba(255,255,255,0.15);
+      transform: scale(1.05);
+    }
+    .nav-btn.left { bottom: 20px; left: 20px; }
+    .nav-btn.right { bottom: 20px; right: 20px; }
 
     footer {
       margin-top: 30px;
@@ -122,8 +126,8 @@
     }
 
     @media (max-width: 480px) {
-      .nav-btn { font-size: 36px; left: 12px; right: 12px; }
-      .lightbox img { max-width: 95%; max-height: 80%; }
+      .nav-btn { font-size: 26px; padding: 10px 14px; }
+      .close-btn { font-size: 28px; }
     }
   </style>
 </head>
@@ -153,7 +157,7 @@
     const prevBtn = document.getElementById('prevBtn');
     const nextBtn = document.getElementById('nextBtn');
 
-    const TOTAL = 5; // ✅ change to your total photos
+    const TOTAL = 5; // number of images uploaded
     const extensions = ['webp', 'jpg', 'jpeg', 'png'];
     const thumbs = [];
 
@@ -161,22 +165,23 @@
     let scale = 1, translate = {x:0, y:0};
     const MAX_SCALE = 4, MIN_SCALE = 1;
 
-    async function imageExists(src) {
-      try { const res = await fetch(src, { method: 'HEAD' }); return res.ok; }
-      catch { return false; }
-    }
-
-    async function getImageSource(baseName) {
+    async function tryLoad(baseName) {
       for (const ext of extensions) {
         const path = `images/${baseName}.${ext}`;
-        if (await imageExists(path)) return path;
+        const img = new Image();
+        img.src = path;
+        await new Promise(r => {
+          img.onload = () => r(true);
+          img.onerror = () => r(false);
+        });
+        if (img.complete && img.naturalWidth > 0) return path;
       }
       return null;
     }
 
     (async function loadGallery() {
       for (let i = 1; i <= TOTAL; i++) {
-        const src = await getImageSource(`photo${i}`);
+        const src = await tryLoad(`photo${i}`);
         if (!src) continue;
 
         const img = new Image();
@@ -207,13 +212,13 @@
     }
 
     function nextImage() {
-      currentIndex = (currentIndex + 1) % thumbs.length; // ✅ loop
+      currentIndex = (currentIndex + 1) % thumbs.length;
       lightboxImg.src = thumbs[currentIndex].src;
       resetZoom();
     }
 
     function prevImage() {
-      currentIndex = (currentIndex - 1 + thumbs.length) % thumbs.length; // ✅ loop
+      currentIndex = (currentIndex - 1 + thumbs.length) % thumbs.length;
       lightboxImg.src = thumbs[currentIndex].src;
       resetZoom();
     }
@@ -224,7 +229,6 @@
       lightboxImg.style.transform = 'scale(1)';
     }
 
-    // Event listeners
     closeBtn.addEventListener('click', closeLightbox);
     nextBtn.addEventListener('click', nextImage);
     prevBtn.addEventListener('click', prevImage);
@@ -239,7 +243,7 @@
       if (e.key === 'ArrowLeft') prevImage();
     });
 
-    // ZOOM (wheel & pinch)
+    // Zoom (wheel + drag)
     function applyTransform() {
       lightboxImg.style.transform = `scale(${scale}) translate(${translate.x}px, ${translate.y}px)`;
     }
@@ -273,7 +277,7 @@
       lightboxImg.releasePointerCapture(e.pointerId);
     });
 
-    // Pinch zoom for touch
+    // Pinch zoom for mobile
     let pinchStart = null;
     lightboxImg.addEventListener('touchstart', e => {
       if (e.touches.length === 2) {
