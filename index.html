@@ -88,7 +88,7 @@
       cursor: grab;
     }
 
-    /* CLOSE BUTTON — clean simple cross */
+    /* CLOSE BUTTON */
     .close-btn {
       position: absolute;
       top: 24px;
@@ -175,43 +175,47 @@
     const prevBtn = document.getElementById('prevBtn');
     const nextBtn = document.getElementById('nextBtn');
 
-    const TOTAL = 5; // change to number of photos you have
     const extensions = ['webp', 'jpg', 'jpeg', 'png'];
     const thumbs = [];
     let currentIndex = 0;
     let scale = 1, translate = {x:0, y:0};
     const MAX_SCALE = 4, MIN_SCALE = 1;
 
-    async function tryLoad(baseName) {
-      for (const ext of extensions) {
-        const path = `images/${baseName}.${ext}`;
-        const img = new Image();
-        img.src = path;
-        await new Promise(r => {
-          img.onload = () => r(true);
-          img.onerror = () => r(false);
-        });
-        if (img.complete && img.naturalWidth > 0) return path;
+    // check if an image exists
+    async function imageExists(src) {
+      try {
+        const res = await fetch(src, { method: 'HEAD' });
+        return res.ok;
+      } catch {
+        return false;
       }
-      return null;
     }
 
+    // auto-detect all available images
     (async function loadGallery() {
-      for (let i = 1; i <= TOTAL; i++) {
-        const src = await tryLoad(`photo${i}`);
-        if (!src) continue;
+      let i = 1;
+      while (true) {
+        let found = false;
+        for (const ext of extensions) {
+          const path = `images/photo${i}.${ext}`;
+          if (await imageExists(path)) {
+            const img = new Image();
+            img.src = path;
+            img.alt = `Photo ${i}`;
+            img.loading = 'lazy';
+            img.addEventListener('click', () => openAt(thumbs.length));
 
-        const img = new Image();
-        img.src = src;
-        img.alt = `Photo ${i}`;
-        img.loading = 'lazy';
-        img.addEventListener('click', () => openAt(i - 1));
-
-        const div = document.createElement('div');
-        div.className = 'thumb';
-        div.appendChild(img);
-        gallery.appendChild(div);
-        thumbs.push(img);
+            const div = document.createElement('div');
+            div.className = 'thumb';
+            div.appendChild(img);
+            gallery.appendChild(div);
+            thumbs.push(img);
+            found = true;
+            break;
+          }
+        }
+        if (!found) break; // stop when no more images found
+        i++;
       }
     })();
 
